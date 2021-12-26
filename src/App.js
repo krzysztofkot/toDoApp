@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+
+import Container from "./UI/Container";
+import TaskForm from "./components/NewTask/TaskForm";
+import ListsContainer from "./components/Lists/ListsContainer";
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+
+  const addTaskHandler = task => {
+    const id = Date.now().toString().slice(6);
+    task.id = id;
+    setTasks(allTasks => {
+      return [...allTasks, task];
+    });
+  };
+
+  let content = <p style={{ textAlign: "center" }}>Please add first goal!</p>;
+
+  if (tasks.length > 0) {
+    content = <ListsContainer allTasks={tasks} />;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <TaskForm onAddTask={addTaskHandler} />
+      {content}
+    </Container>
   );
 }
 
