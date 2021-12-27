@@ -2,10 +2,14 @@ import styled from "styled-components";
 
 const Container = styled.div`
    {
-    // background-color: var(--toDo);
+    background-color: var(--color-primary);
     max-width: 1000px;
-    width: 90%;
-    margin: 20px auto;
+    padding: 16px;
+
+    @media (min-width: 765px) {
+      margin: 20px auto;
+      width: 90%;
+    }
   }
 `;
 
