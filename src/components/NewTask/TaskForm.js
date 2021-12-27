@@ -5,11 +5,10 @@ import styled from "styled-components";
 
 const FormControl = styled.div`
    {
-    padding: 16px;
+    // padding: 16px;
     width: 100%;
-    background-color: #495057;
-    border-radius: 10px;
-    border: 2px solid #7d8597;
+    background-color: var(--color-primary);
+    // border: 2px solid #7d8597;
     color: var(--input-font-color);
   }
 
@@ -20,26 +19,35 @@ const FormControl = styled.div`
 
   & label {
     display: block;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     font-size: 20px;
     padding-bottom: 12px;
   }
 
   & input,
   & textarea {
+    border: none;
     width: 100%;
     display: block;
     padding: 6px;
     font: inherit;
-    background-color: #343a40;
-    border-radius: 5px;
-    border: 1px solid black;
+    background-color: var(--color-secondary);
+    border-top: 1px solid var(--color-tertiary);
+    border-bottom: 1px solid var(--color-tertiary);
     color: var(--input-font-color);
     outline: none;
+    transition: all 0.2s;
   }
 
   & textarea {
-    height: 100px;
+    resize: none;
+    height: 75px;
+  }
+
+  & textarea:focus,
+  & input:focus {
+    border-top: 1px solid #74788d;
+    border-bottom: 1px solid #74788d;
   }
 
   & p {
@@ -101,18 +109,20 @@ const TaskForm = props => {
           <label>Title</label>
           <input
             type="text"
-            placeholder="Add title here"
+            placeholder="Add title here (max 100 chars)"
             value={title}
             onChange={titleInputHandler}
+            maxLength={120}
           />
           {!isValidTitle ? error : ""}
         </div>
         <div>
           <label>Description</label>
           <textarea
-            placeholder="Enter short description..."
+            placeholder="Enter short description (max 350 chars)..."
             value={desc}
             onChange={descInputHandler}
+            maxLength={350}
           />
           {!isValidDesc ? error : ""}
         </div>

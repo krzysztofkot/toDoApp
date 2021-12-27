@@ -1,12 +1,23 @@
 import { useState } from "react";
 import TaskItem from "./TaskItem";
+
 const TaskList = props => {
-  const [allTasks, setAllTasks] = useState(props.allTasks);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const expandHandler = id => {
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <ul>
-      {allTasks.map(task => (
-        <TaskItem title={task.title} desc={task.desc} key={task.id} />
+      {props.allTasks.map(task => (
+        <TaskItem
+          key={task.id}
+          onClick={expandHandler}
+          isExpanded={isExpanded}
+          color={props.bgc}
+          data={task}
+        ></TaskItem>
       ))}
     </ul>
   );
