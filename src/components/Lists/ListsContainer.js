@@ -2,19 +2,38 @@ import { withTheme } from "styled-components";
 
 import TaskList from "../Tasks/TaskList";
 import ListWrapper from "./ListWrapper";
+import Filter from "../Filter/Filter";
+import { useState } from "react";
 
 const ListsContainer = ({ allTasks, onDeleteTask, theme }) => {
-  const tasksArr = [];
+  const [filterOption, setFilterOption] = useState("all");
+  let tasksArr = [];
 
-  for (const el in allTasks) {
-    tasksArr.push({ ...allTasks[el] });
+  if (filterOption === "all") {
+    for (const el in allTasks) {
+      tasksArr.push({ ...allTasks[el] });
+    }
+  } else {
+    tasksArr = [allTasks[filterOption]];
   }
+
+  const filterOptionsHandler = option => {
+    console.log(`Hello Im in list container ${option}`);
+    setFilterOption(option);
+  };
+
   const deleteHandler = data => {
+    console.log(data);
+    console.log(allTasks[data.title].tasks.length);
+    if (allTasks[data.title].tasks.length === 1) {
+      setFilterOption("all");
+    }
     onDeleteTask(data);
   };
 
   return (
     <div>
+      <Filter allTasks={allTasks} onFilterOptions={filterOptionsHandler} />
       {tasksArr.map(el => {
         return (
           <ListWrapper bgc={theme.colors[el.id]} key={el.id}>

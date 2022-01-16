@@ -127,10 +127,7 @@ function App() {
     allTasks.done.tasks.length > 0
   ) {
     content = (
-      <>
-        <Filter allTasks={allTasks} />
-        <ListsContainer allTasks={allTasks} onDeleteTask={deleteTaskHandler} />
-      </>
+      <ListsContainer allTasks={allTasks} onDeleteTask={deleteTaskHandler} />
     );
   } else {
     content = <Placeholder>Please add first task</Placeholder>;

@@ -1,6 +1,6 @@
 import FilterStyles from "./FilterStyles";
 
-const Filter = ({ allTasks }) => {
+const Filter = ({ allTasks, onFilterOptions }) => {
   const OneGrouptasks = [];
   for (const key in allTasks) {
     OneGrouptasks.push(allTasks[key]);
@@ -16,10 +16,16 @@ const Filter = ({ allTasks }) => {
       ""
     );
   };
+
+  const onChangeHandler = e => {
+    // console.log(e.target.value);
+    onFilterOptions(e.target.value);
+  };
+
   return (
     <FilterStyles>
-      <label>Filter by statuses:</label>
-      <select name="group" id="group">
+      <label>Filter by:</label>
+      <select name="group" id="group" onChange={onChangeHandler}>
         <option value="all">all</option>
         {OneGrouptasks.map(returnOptions)}
       </select>
