@@ -56,7 +56,7 @@ const TaskForm = props => {
             placeholder="Add title here (max 100 chars)"
             value={title}
             onChange={titleInputHandler}
-            maxLength={120}
+            maxLength={100}
           />
           {!isValidTitle ? error : ""}
         </div>

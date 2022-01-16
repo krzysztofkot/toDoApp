@@ -11,6 +11,9 @@ const FormControl = styled.div`
     // text-transform: uppercase;
     font-size: 20px;
     padding-bottom: 12px;
+    @media (max-width: ${({ theme }) => theme.media.tablet}) {
+      font-size: 16px;
+    }
   }
 
   & input,
@@ -26,6 +29,11 @@ const FormControl = styled.div`
     color: ${({ theme }) => theme.colors.inputFontColor};
     outline: none;
     transition: all 0.2s;
+    font-size: 16px;
+
+    @media (max-width: ${({ theme }) => theme.media.tablet}) {
+      font-size: 14px;
+    }
   }
 
   & textarea {
