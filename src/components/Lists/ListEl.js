@@ -17,8 +17,8 @@ const ListEl = styled.li`
 
   & p {
     height: 0;
-    font-size: 14px;
     line-height: 1.6;
+    font-size: 14px;
 
     @media (max-width: ${({ theme }) => theme.media.tablet}) {
       font-size: 12px;

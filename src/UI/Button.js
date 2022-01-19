@@ -11,10 +11,10 @@ const Button = styled.button`
     cursor: pointer;
     font-family: inherit;
     transition: all 0.3s;
-    width: 100%;
 
-    @media (min-width: ${({ theme }) => theme.media.tablet}) {
-      width: auto;
+    width: auto;
+    @media (max-width: ${({ theme }) => theme.media.tablet}) {
+      width: 100%;
     }
   }
 

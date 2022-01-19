@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./UI/Global";
-import Container from "./UI/Container";
+import Wrapper from "./UI/Wrapper";
 import TaskForm from "./components/NewTask/Forms/TaskForm";
-import ListsContainer from "./components/Lists/ListsContainer";
-import Filter from "./components/Filter/Filter";
+import Container from "./components/Lists/Container";
 import Placeholder from "./UI/Placeholder";
 
 const theme = {
@@ -127,7 +126,7 @@ function App() {
     allTasks.done.tasks.length > 0
   ) {
     content = (
-      <ListsContainer allTasks={allTasks} onDeleteTask={deleteTaskHandler} />
+      <Container allTasks={allTasks} onDeleteTask={deleteTaskHandler} />
     );
   } else {
     content = <Placeholder>Please add first task</Placeholder>;
@@ -136,10 +135,10 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <Container>
+      <Wrapper>
         <TaskForm onAddTask={addTaskHandler} />
         {content}
-      </Container>
+      </Wrapper>
     </ThemeProvider>
   );
 }
