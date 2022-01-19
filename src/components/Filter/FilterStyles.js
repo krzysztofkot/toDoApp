@@ -4,11 +4,9 @@ const FilterStyles = styled.div`
   & {
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: flex-start;
   }
   & select {
-    /* text-align: center; */
     text-transform: uppercase;
     padding: 0 12px;
     border: 1px solid black;

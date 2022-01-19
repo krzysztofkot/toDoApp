@@ -18,7 +18,6 @@ const Filter = ({ allTasks, onFilterOptions }) => {
   };
 
   const onChangeHandler = e => {
-    // console.log(e.target.value);
     onFilterOptions(e.target.value);
   };
 
