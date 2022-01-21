@@ -22,6 +22,8 @@ body {
   background-attachment: fixed;
   background-position: center center;
   background-size: cover;
-}`;
+}
+
+li{list-style: none;}`;
 
 export default GlobalStyles;
