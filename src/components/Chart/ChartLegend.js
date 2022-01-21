@@ -8,7 +8,6 @@ const ChartLegend = ({ data }) => {
   for (const el in data) {
     dataArr.push(data[el]);
   }
-  console.log(dataArr);
 
   return (
     <ChartLegendStyle>

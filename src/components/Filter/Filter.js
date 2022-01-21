@@ -1,6 +1,6 @@
 import FilterStyles from "./FilterStyles";
 
-const Filter = ({ allTasks, onFilterOptions }) => {
+const Filter = ({ allTasks, onFilterOptions, filter }) => {
   const OneGrouptasks = [];
   for (const key in allTasks) {
     OneGrouptasks.push(allTasks[key]);
@@ -24,7 +24,7 @@ const Filter = ({ allTasks, onFilterOptions }) => {
   return (
     <FilterStyles>
       <label>Filter by:</label>
-      <select name="group" id="group" onChange={onChangeHandler}>
+      <select name="group" id="group" value={filter} onChange={onChangeHandler}>
         <option value="all">all</option>
         {OneGrouptasks.map(returnOptions)}
       </select>

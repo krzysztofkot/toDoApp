@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ListEl = styled.li`
+const ListEl = styled.div`
    {
     border-top: 1px solid ${({ theme }) => theme.colors.colorTertiary};
     background-color: ${({ theme }) => theme.colors.colorPrimary};

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./UI/Global";
 import Wrapper from "./UI/Wrapper";
@@ -22,67 +22,46 @@ const theme = {
   },
 };
 
-const startTasks = {
-  toDo: {
-    tasks: [
-      {
-        id: 139004,
-        title: "Lorem ipsum dolor ",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas sint maiores  saepe distinctio sequi ea, commodi necessitatibus tempore ipsum ut obcaecati minus enim. Facilis?",
-      },
-    ],
-    title: "To do",
-    id: "toDo",
-  },
-  inProgress: {
-    tasks: [
-      {
-        id: 136674,
-        title: "Lorem ipsum dolor sit amet 15688",
-        desc: "Lorem ipsum dolor ssicing elit. Voluptas sint maiores porro labore quae, cumque totam possimus saepe distinctio sequi ea, commodi necessitatibus tempore ipsum ut obcaecati minus enim. Facilis?",
-      },
-      {
-        id: 13434345,
-        title: "Lorem ipsum dolor sit amet 3242234 1",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas sint maiores porro labore quae, cumque totam possimus saepe distinctio sequi ea, commodi necessitatibus tempore ipsum ut obcaecati minus enim. Facilis?",
-      },
-      {
-        id: 21124212,
-        title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-        desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis, harum Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto vel natus adipisci?",
-      },
-    ],
-    title: "In progress",
-    id: "inProgress",
-  },
-  done: {
-    tasks: [
-      {
-        id: 211245,
-        title: "Lorem ipsum dolor sit 23455767",
-        desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis, harum Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto vel natus adipisci?",
-      },
-      {
-        id: 134345,
-        title: "Lorem ipsum ",
-        desc: "Lorem ipsumm possimus saepe distinctio sequi ea, commodi necessitatibus tempore ipsum ut obcaecati minus enim. Facilis?",
-      },
-    ],
-    title: "Done",
-    id: "done",
-  },
+let startTasks;
+
+if (localStorage.getItem("savedTasks") === null) {
+  console.log("inside");
+  startTasks = {
+    toDo: {
+      tasks: [],
+      title: "To do",
+      id: "toDo",
+    },
+    inProgress: {
+      tasks: [],
+      title: "In progress",
+      id: "inProgress",
+    },
+    done: {
+      tasks: [],
+      title: "Done",
+      id: "done",
+    },
+  };
+} else {
+  console.log("outside");
+  startTasks = JSON.parse(localStorage.getItem("savedTasks"));
+}
+
+const saveTasksToStorage = tasks => {
+  console.log(tasks);
+  localStorage.setItem("savedTasks", JSON.stringify(tasks));
 };
-// const startTasks2 = {
-//   toDo: [],
-//   inProgress: [],
-//   done: [],
-// };
 
 function App() {
   const [allTasks, setAllTasks] = useState(startTasks);
 
+  useEffect(() => {
+    saveTasksToStorage(allTasks);
+  }, [allTasks]);
+
   const addTaskHandler = task => {
-    const id = Date.now().toString().slice(6);
+    const id = parseInt(Date.now().toString().slice(6));
     task.id = id;
 
     setAllTasks(prevState => {
@@ -98,23 +77,51 @@ function App() {
 
   const deleteTaskHandler = task => {
     const { id, title } = task;
-    console.log(id, title);
     setAllTasks(prevState => {
       return {
         ...prevState,
+
+        toDo: {
+          ...prevState.toDo,
+        },
+        inProgress: {
+          ...prevState.inProgress,
+        },
+        done: {
+          ...prevState.done,
+        },
         [title]: {
           ...prevState[title],
           tasks: prevState[title].tasks.filter(el => el.id !== id),
         },
-        // toDo: {
-        //   ...prevState.toDo,
-        // },
-        // inProgress: {
-        //   ...prevState.inProgress,
-        // },
-        // done: {
-        //   ...prevState.done,
-        // },
+      };
+    });
+  };
+
+  const moveTaskHandler = ({ from, to, id }) => {
+    const currentTask = allTasks[from].tasks.find(el => el.id === parseInt(id));
+
+    setAllTasks(prevState => {
+      return {
+        ...prevState,
+
+        toDo: {
+          ...prevState.toDo,
+        },
+        inProgress: {
+          ...prevState.inProgress,
+        },
+        done: {
+          ...prevState.done,
+        },
+        [from]: {
+          ...prevState[from],
+          tasks: prevState[from].tasks.filter(el => el.id !== parseInt(id)),
+        },
+        [to]: {
+          ...prevState[to],
+          tasks: [...prevState[to].tasks, currentTask],
+        },
       };
     });
   };
@@ -126,7 +133,11 @@ function App() {
     allTasks.done.tasks.length > 0
   ) {
     content = (
-      <Container allTasks={allTasks} onDeleteTask={deleteTaskHandler} />
+      <Container
+        allTasks={allTasks}
+        onDeleteTask={deleteTaskHandler}
+        onMoveTask={moveTaskHandler}
+      />
     );
   } else {
     content = <Placeholder>Please add first task</Placeholder>;

@@ -40,8 +40,6 @@ const Chart = ({ allTasks, theme, filter }) => {
 
     labels.push(allTasks[filter].title, "rest tasks");
     data.push(currTasksLength, taskSum - currTasksLength);
-    console.log(data);
-    console.log(labels);
   }
   const borderColor = [...backgroundColor];
 
