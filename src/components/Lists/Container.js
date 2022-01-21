@@ -23,8 +23,6 @@ const Container = ({ allTasks, onDeleteTask, theme, onMoveTask }) => {
   };
 
   const deleteHandler = data => {
-    console.log(data);
-    console.log(allTasks[data.title].tasks.length);
     if (allTasks[data.title].tasks.length === 1) {
       setFilterOption("all");
     }
@@ -35,7 +33,6 @@ const Container = ({ allTasks, onDeleteTask, theme, onMoveTask }) => {
   };
 
   const dragEndHandler = ({ draggableId, destination, source }) => {
-    // console.log(source.droppableId, destination.droppableId);
     if (destination && source.droppableId !== destination.droppableId) {
       onMoveTask({
         from: source.droppableId,

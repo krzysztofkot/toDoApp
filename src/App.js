@@ -25,7 +25,6 @@ const theme = {
 let startTasks;
 
 if (localStorage.getItem("savedTasks") === null) {
-  console.log("inside");
   startTasks = {
     toDo: {
       tasks: [],
@@ -44,12 +43,10 @@ if (localStorage.getItem("savedTasks") === null) {
     },
   };
 } else {
-  console.log("outside");
   startTasks = JSON.parse(localStorage.getItem("savedTasks"));
 }
 
 const saveTasksToStorage = tasks => {
-  console.log(tasks);
   localStorage.setItem("savedTasks", JSON.stringify(tasks));
 };
 
