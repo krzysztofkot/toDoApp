@@ -1,7 +1,7 @@
 import { Droppable } from "react-beautiful-dnd";
 import TaskItem from "./TaskItem";
 
-const TaskList = ({ allTasks, onDeleteHandler }) => {
+const TaskList = ({ allTasks, onDeleteHandler, filter }) => {
   const deleteHandler = id => {
     onDeleteHandler({
       id,
@@ -19,6 +19,7 @@ const TaskList = ({ allTasks, onDeleteHandler }) => {
                 data={task}
                 onDeleteHandler={deleteHandler}
                 title={allTasks.id}
+                filter={filter}
               ></TaskItem>
             ))}
             {provided.placeholder}

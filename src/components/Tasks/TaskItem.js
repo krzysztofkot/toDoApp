@@ -6,7 +6,7 @@ import IconWrapper from "../../UI/IconWrapper";
 import ListEl from "../Lists/ListEl";
 import TaskTitle from "./TaskTitle";
 
-const TaskItem = ({ data, onDeleteHandler, title }) => {
+const TaskItem = ({ data, onDeleteHandler, filter }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const deleteTask = () => {
@@ -17,7 +17,12 @@ const TaskItem = ({ data, onDeleteHandler, title }) => {
     setIsExpanded(!isExpanded);
   };
   return (
-    <Draggable key={data.id} draggableId={`${data.id}`} index={data.id}>
+    <Draggable
+      key={data.id}
+      draggableId={`${data.id}`}
+      index={data.id}
+      isDragDisabled={filter !== "all" ? true : false}
+    >
       {(provided, snapshot) => {
         return (
           <li

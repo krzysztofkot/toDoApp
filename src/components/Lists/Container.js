@@ -28,9 +28,6 @@ const Container = ({ allTasks, onDeleteTask, theme, onMoveTask }) => {
     }
     onDeleteTask(data);
   };
-  const dragStartHandler = () => {
-    setFilterOption("all");
-  };
 
   const dragEndHandler = ({ draggableId, destination, source }) => {
     if (destination && source.droppableId !== destination.droppableId) {
@@ -50,10 +47,7 @@ const Container = ({ allTasks, onDeleteTask, theme, onMoveTask }) => {
         filter={filterOption}
       />
       <Chart allTasks={allTasks} filter={filterOption}></Chart>
-      <DragDropContext
-        onDragEnd={dragEndHandler}
-        onBeforeDragStart={dragStartHandler}
-      >
+      <DragDropContext onDragEnd={dragEndHandler}>
         {tasksArr.map(el => {
           return (
             <ListWrapper bgc={theme.colors[el.id]} key={el.id}>
@@ -61,6 +55,7 @@ const Container = ({ allTasks, onDeleteTask, theme, onMoveTask }) => {
               <TaskList
                 allTasks={el}
                 onDeleteHandler={deleteHandler}
+                filter={filterOption}
               ></TaskList>
             </ListWrapper>
           );
