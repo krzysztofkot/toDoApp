@@ -1,14 +1,20 @@
+import { useState } from "react";
+import useTitle from "../hooks/use-title";
 import { DragDropContext } from "react-beautiful-dnd";
 import { withTheme } from "styled-components";
 import TaskList from "../Tasks/TaskList";
 import ListWrapper from "./ListWrapper";
 import Filter from "../Filter/Filter";
 import Chart from "../Chart/Chart";
-import { useState } from "react";
 
 const Container = ({ allTasks, onDeleteTask, theme, onMoveTask }) => {
   const [filterOption, setFilterOption] = useState("all");
   let tasksArr = [];
+  useTitle(
+    `Active filter: ${
+      filterOption === "all" ? "all" : allTasks[filterOption].title
+    }`
+  );
 
   if (filterOption === "all") {
     for (const el in allTasks) {

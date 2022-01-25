@@ -22,6 +22,7 @@ body {
   background-attachment: fixed;
   background-position: center center;
   background-size: cover;
+  position: relative;
 }
 
 li{list-style: none;}`;

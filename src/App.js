@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import useStorage from "./components/hooks/useStorage";
+import useTitle from "./components/hooks/use-title";
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./UI/Global";
 import Wrapper from "./UI/Wrapper";
@@ -24,38 +26,34 @@ const theme = {
 
 let startTasks;
 
-if (localStorage.getItem("savedTasks") === null) {
-  startTasks = {
-    toDo: {
-      tasks: [],
-      title: "To do",
-      id: "toDo",
-    },
-    inProgress: {
-      tasks: [],
-      title: "In progress",
-      id: "inProgress",
-    },
-    done: {
-      tasks: [],
-      title: "Done",
-      id: "done",
-    },
-  };
-} else {
-  startTasks = JSON.parse(localStorage.getItem("savedTasks"));
-}
-
-const saveTasksToStorage = tasks => {
-  localStorage.setItem("savedTasks", JSON.stringify(tasks));
-};
-
 function App() {
-  const [allTasks, setAllTasks] = useState(startTasks);
+  if (!localStorage.getItem("savedTasks")) {
+    startTasks = {
+      toDo: {
+        tasks: [],
+        title: "To do",
+        id: "toDo",
+      },
+      inProgress: {
+        tasks: [],
+        title: "In progress",
+        id: "inProgress",
+      },
+      done: {
+        tasks: [],
+        title: "Done",
+        id: "done",
+      },
+    };
+  } else {
+    startTasks = JSON.parse(localStorage.getItem("savedTasks"));
+  }
 
-  useEffect(() => {
-    saveTasksToStorage(allTasks);
-  }, [allTasks]);
+  const [title, setTitle] = useState("React Task Manager");
+  useTitle(title);
+
+  const [allTasks, setAllTasks] = useState(startTasks);
+  useStorage(allTasks);
 
   const addTaskHandler = task => {
     const id = parseInt(Date.now().toString().slice(6));
@@ -70,6 +68,7 @@ function App() {
         },
       };
     });
+    setTitle(`Task added!`);
   };
 
   const deleteTaskHandler = task => {
@@ -93,6 +92,7 @@ function App() {
         },
       };
     });
+    setTitle("Task deleted!");
   };
 
   const moveTaskHandler = ({ from, to, id }) => {
@@ -121,6 +121,9 @@ function App() {
         },
       };
     });
+    setTitle(
+      `Task moved from ${allTasks[from].title} to ${allTasks[to].title}`
+    );
   };
 
   let content;
