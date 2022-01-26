@@ -9,7 +9,7 @@ const Filter = ({ allTasks, onFilterOptions, filter }) => {
   const returnOptions = el => {
     const { tasks, title, id } = el;
     return tasks.length ? (
-      <option value={id} key={id}>
+      <option value={id} key={id} data-testid={"option"}>
         {title}
       </option>
     ) : (
@@ -24,8 +24,16 @@ const Filter = ({ allTasks, onFilterOptions, filter }) => {
   return (
     <FilterStyles>
       <label>Filter by:</label>
-      <select name="group" id="group" value={filter} onChange={onChangeHandler}>
-        <option value="all">all</option>
+      <select
+        name="group"
+        id="group"
+        value={filter}
+        onChange={onChangeHandler}
+        data-testid="select"
+      >
+        <option value="all" data-testid="option">
+          all
+        </option>
         {OneGrouptasks.map(returnOptions)}
       </select>
     </FilterStyles>

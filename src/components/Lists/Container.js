@@ -51,12 +51,17 @@ const Container = ({ allTasks, onDeleteTask, theme, onMoveTask }) => {
         allTasks={allTasks}
         onFilterOptions={filterOptionsHandler}
         filter={filterOption}
+        role={"filter"}
       />
       <Chart allTasks={allTasks} filter={filterOption}></Chart>
       <DragDropContext onDragEnd={dragEndHandler}>
         {tasksArr.map(el => {
           return (
-            <ListWrapper bgc={theme.colors[el.id]} key={el.id}>
+            <ListWrapper
+              bgc={theme.colors[el.id]}
+              key={el.id}
+              data-testid={el.id}
+            >
               <h2>{el.title}</h2>
               <TaskList
                 allTasks={el}
