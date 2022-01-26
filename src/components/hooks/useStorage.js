@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const useStorage = tasks => {
+const useStorage = (tasks, storageItem) => {
   let totalTasks = 0;
 
   for (const obj in tasks) {
@@ -8,9 +8,9 @@ const useStorage = tasks => {
   }
   useEffect(() => {
     if (totalTasks) {
-      localStorage.setItem("savedTasks", JSON.stringify(tasks));
+      localStorage.setItem(storageItem, JSON.stringify(tasks));
     } else {
-      localStorage.removeItem("savedTasks");
+      localStorage.removeItem(storageItem);
     }
   }, [tasks, totalTasks]);
 };

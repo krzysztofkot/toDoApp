@@ -53,7 +53,7 @@ function App() {
   useTitle(title);
 
   const [allTasks, setAllTasks] = useState(startTasks);
-  useStorage(allTasks);
+  useStorage(allTasks, "savedTasks");
 
   const addTaskHandler = task => {
     const id = parseInt(Date.now().toString().slice(6));
