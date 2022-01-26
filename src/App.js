@@ -1,5 +1,4 @@
-import { useState } from "react";
-import useStorage from "./components/hooks/useStorage";
+import { useEffect, useState } from "react";
 import useTitle from "./components/hooks/use-title";
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./UI/Global";
@@ -26,34 +25,45 @@ const theme = {
 
 let startTasks;
 
+if (!localStorage.getItem("savedTasks")) {
+  startTasks = {
+    toDo: {
+      tasks: [],
+      title: "To do",
+      id: "toDo",
+    },
+    inProgress: {
+      tasks: [],
+      title: "In progress",
+      id: "inProgress",
+    },
+    done: {
+      tasks: [],
+      title: "Done",
+      id: "done",
+    },
+  };
+} else {
+  startTasks = JSON.parse(localStorage.getItem("savedTasks"));
+}
 function App() {
-  if (!localStorage.getItem("savedTasks")) {
-    startTasks = {
-      toDo: {
-        tasks: [],
-        title: "To do",
-        id: "toDo",
-      },
-      inProgress: {
-        tasks: [],
-        title: "In progress",
-        id: "inProgress",
-      },
-      done: {
-        tasks: [],
-        title: "Done",
-        id: "done",
-      },
-    };
-  } else {
-    startTasks = JSON.parse(localStorage.getItem("savedTasks"));
-  }
-
   const [title, setTitle] = useState("React Task Manager");
   useTitle(title);
 
   const [allTasks, setAllTasks] = useState(startTasks);
-  useStorage(allTasks, "savedTasks");
+
+  useEffect(() => {
+    let totalTasks = 0;
+
+    for (const obj in allTasks) {
+      totalTasks += allTasks[obj].tasks.length;
+    }
+    if (totalTasks) {
+      localStorage.setItem("savedTasks", JSON.stringify(allTasks));
+    } else {
+      localStorage.removeItem("savedTasks");
+    }
+  }, [allTasks]);
 
   const addTaskHandler = task => {
     const id = parseInt(Date.now().toString().slice(6));
