@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import useTitle from "./components/hooks/use-title";
+import { useEffect, useReducer } from "react";
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./UI/Global";
 import Wrapper from "./UI/Wrapper";
 import TaskForm from "./components/NewTask/Forms/TaskForm";
 import Container from "./components/Lists/Container";
 import Placeholder from "./UI/Placeholder";
+// import useTitle from "./components/hooks/use-title";
 
 const theme = {
   colors: {
@@ -46,11 +46,69 @@ if (!localStorage.getItem("savedTasks")) {
 } else {
   startTasks = JSON.parse(localStorage.getItem("savedTasks"));
 }
-function App() {
-  const [title, setTitle] = useState("React Task Manager");
-  useTitle(title);
 
-  const [allTasks, setAllTasks] = useState(startTasks);
+const tasksReducer = (prevState, element) => {
+  const { action, data } = element;
+  if (action === "add") {
+    return {
+      ...prevState,
+      toDo: {
+        ...prevState.toDo,
+        tasks: [
+          ...prevState.toDo.tasks,
+          { title: data.title, desc: data.desc, id: data.id },
+        ],
+      },
+    };
+  }
+  if (action === "delete") {
+    return {
+      ...prevState,
+      toDo: {
+        ...prevState.toDo,
+      },
+      inProgress: {
+        ...prevState.inProgress,
+      },
+      done: {
+        ...prevState.done,
+      },
+      [data.from]: {
+        ...prevState[data.from],
+        tasks: prevState[data.from].tasks.filter(el => el.id !== data.id),
+      },
+    };
+  } else if (action === "move") {
+    const currentTask = prevState[data.from].tasks.find(
+      el => el.id === parseInt(data.id)
+    );
+    return {
+      ...prevState,
+      toDo: {
+        ...prevState.toDo,
+      },
+      inProgress: {
+        ...prevState.inProgress,
+      },
+      done: {
+        ...prevState.done,
+      },
+      [data.from]: {
+        ...prevState[data.from],
+        tasks: prevState[data.from].tasks.filter(
+          el => el.id !== parseInt(data.id)
+        ),
+      },
+      [data.to]: {
+        ...prevState[data.to],
+        tasks: [...prevState[data.to].tasks, currentTask],
+      },
+    };
+  }
+};
+
+function App() {
+  const [allTasks, dispatchTasks] = useReducer(tasksReducer, startTasks);
 
   useEffect(() => {
     let totalTasks = 0;
@@ -65,75 +123,8 @@ function App() {
     }
   }, [allTasks]);
 
-  const addTaskHandler = task => {
-    const id = parseInt(Date.now().toString().slice(6));
-    task.id = id;
-
-    setAllTasks(prevState => {
-      return {
-        ...prevState,
-        toDo: {
-          ...prevState.toDo,
-          tasks: [...prevState.toDo.tasks, task],
-        },
-      };
-    });
-    setTitle(`Task added!`);
-  };
-
-  const deleteTaskHandler = task => {
-    const { id, title } = task;
-    setAllTasks(prevState => {
-      return {
-        ...prevState,
-
-        toDo: {
-          ...prevState.toDo,
-        },
-        inProgress: {
-          ...prevState.inProgress,
-        },
-        done: {
-          ...prevState.done,
-        },
-        [title]: {
-          ...prevState[title],
-          tasks: prevState[title].tasks.filter(el => el.id !== id),
-        },
-      };
-    });
-    setTitle("Task deleted!");
-  };
-
-  const moveTaskHandler = ({ from, to, id }) => {
-    const currentTask = allTasks[from].tasks.find(el => el.id === parseInt(id));
-
-    setAllTasks(prevState => {
-      return {
-        ...prevState,
-
-        toDo: {
-          ...prevState.toDo,
-        },
-        inProgress: {
-          ...prevState.inProgress,
-        },
-        done: {
-          ...prevState.done,
-        },
-        [from]: {
-          ...prevState[from],
-          tasks: prevState[from].tasks.filter(el => el.id !== parseInt(id)),
-        },
-        [to]: {
-          ...prevState[to],
-          tasks: [...prevState[to].tasks, currentTask],
-        },
-      };
-    });
-    setTitle(
-      `Task moved from ${allTasks[from].title} to ${allTasks[to].title}`
-    );
+  const modifyTaskHandler = option => {
+    dispatchTasks(option);
   };
 
   let content;
@@ -143,11 +134,7 @@ function App() {
     allTasks.done.tasks.length > 0
   ) {
     content = (
-      <Container
-        allTasks={allTasks}
-        onDeleteTask={deleteTaskHandler}
-        onMoveTask={moveTaskHandler}
-      />
+      <Container allTasks={allTasks} onModifyTasks={modifyTaskHandler} />
     );
   } else {
     content = <Placeholder>Please add first task</Placeholder>;
@@ -157,7 +144,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <Wrapper>
-        <TaskForm onAddTask={addTaskHandler} />
+        <TaskForm onModifyTasks={modifyTaskHandler} />
         {content}
       </Wrapper>
     </ThemeProvider>

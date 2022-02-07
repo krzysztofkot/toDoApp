@@ -3,7 +3,7 @@ import FormControl from "./FormControl";
 
 import Button from "../../../UI/Button";
 
-const TaskForm = props => {
+const TaskForm = ({ onModifyTasks }) => {
   const [title, setTitle] = useState("");
   const [isValidTitle, setIsValidTitle] = useState(true);
   const [isValidDesc, setIsValidDesc] = useState(true);
@@ -40,8 +40,12 @@ const TaskForm = props => {
     const newTask = {
       title,
       desc,
+      id: parseInt(Date.now().toString().slice(6)),
     };
-    props.onAddTask(newTask);
+    onModifyTasks({
+      action: "add",
+      data: newTask,
+    });
     setTitle("");
     setDesc("");
   };

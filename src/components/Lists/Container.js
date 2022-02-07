@@ -13,9 +13,8 @@ if (!localStorage.getItem("savedFilter")) {
   activeFilter = "all";
 } else activeFilter = JSON.parse(localStorage.getItem("savedFilter"));
 
-const Container = ({ allTasks, onDeleteTask, theme, onMoveTask }) => {
+const Container = ({ allTasks, onModifyTasks, theme }) => {
   const [filterOption, setFilterOption] = useState(activeFilter);
-  console.log("rendered container");
   let tasksArr = [];
   useTitle(
     `Active filter: ${
@@ -45,18 +44,24 @@ const Container = ({ allTasks, onDeleteTask, theme, onMoveTask }) => {
   };
 
   const deleteHandler = data => {
-    if (allTasks[data.title].tasks.length === 1) {
+    if (allTasks[data.from].tasks.length === 1) {
       setFilterOption("all");
     }
-    onDeleteTask(data);
+    onModifyTasks({
+      action: "delete",
+      data,
+    });
   };
 
   const dragEndHandler = ({ draggableId, destination, source }) => {
     if (destination && source.droppableId !== destination.droppableId) {
-      onMoveTask({
-        from: source.droppableId,
-        to: destination.droppableId,
-        id: draggableId,
+      onModifyTasks({
+        action: "move",
+        data: {
+          from: source.droppableId,
+          to: destination.droppableId,
+          id: draggableId,
+        },
       });
     }
   };

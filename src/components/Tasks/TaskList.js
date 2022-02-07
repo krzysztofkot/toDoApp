@@ -5,12 +5,12 @@ const TaskList = ({ allTasks, onDeleteHandler, filter }) => {
   const deleteHandler = id => {
     onDeleteHandler({
       id,
-      title: allTasks.id,
+      from: allTasks.id,
     });
   };
   return (
     <Droppable droppableId={allTasks.id} key={allTasks.id}>
-      {(provided, snapshot) => {
+      {provided => {
         return (
           <ul {...provided.droppableProps} ref={provided.innerRef}>
             {allTasks.tasks.map(task => (

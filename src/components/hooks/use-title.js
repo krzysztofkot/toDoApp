@@ -6,7 +6,7 @@ const useTitle = text => {
     setTimeout(() => {
       document.title = "React Task Manager";
     }, 5000);
-  });
+  }, [text]);
 };
 
 export default useTitle;
