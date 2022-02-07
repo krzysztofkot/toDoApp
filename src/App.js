@@ -1,11 +1,11 @@
-import { useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./UI/Global";
 import Wrapper from "./UI/Wrapper";
 import TaskForm from "./components/NewTask/Forms/TaskForm";
 import Container from "./components/Lists/Container";
 import Placeholder from "./UI/Placeholder";
-// import useTitle from "./components/hooks/use-title";
+import useTitle from "./components/hooks/use-title";
 
 const theme = {
   colors: {
@@ -108,7 +108,9 @@ const tasksReducer = (prevState, element) => {
 };
 
 function App() {
+  const [title, setTitle] = useState("React Tasks Manager");
   const [allTasks, dispatchTasks] = useReducer(tasksReducer, startTasks);
+  useTitle(title);
 
   useEffect(() => {
     let totalTasks = 0;
@@ -124,7 +126,14 @@ function App() {
   }, [allTasks]);
 
   const modifyTaskHandler = option => {
+    const { action, data } = option;
     dispatchTasks(option);
+    if (action === "add") setTitle("Task added");
+    else if (action === "delete") setTitle("Task deleted");
+    else if (action === "move")
+      setTitle(
+        `Moved from  ${allTasks[data.from].title} to ${allTasks[data.to].title}`
+      );
   };
 
   let content;
