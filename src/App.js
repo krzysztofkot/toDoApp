@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useCallback } from "react";
 import { ThemeProvider } from "styled-components";
 import GlobalStyles from "./UI/Global";
 import Wrapper from "./UI/Wrapper";
@@ -6,22 +6,25 @@ import TaskForm from "./components/NewTask/Forms/TaskForm";
 import Container from "./components/Lists/Container";
 import Placeholder from "./UI/Placeholder";
 import useTitle from "./components/hooks/use-title";
+import UseOptions from "./components/hooks/use-options";
+import Popup from "./UI/Popup";
+import { lightTheme, darkTheme } from "./UI/Theme";
 
-const theme = {
-  colors: {
-    toDo: "#f6511d",
-    inProgress: "#ffb400",
-    done: "#7fb800",
-    inputFontColor: "#adb5bd",
-    colorPrimary: "#3a4046",
-    colorSecondary: "#343a40",
-    colorTertiary: "#1d2023",
-    colorFourth: "#3f454c",
-  },
-  media: {
-    tablet: "765px",
-  },
-};
+// const theme = {
+//   colors: {
+//     toDo: "#f6511d",
+//     inProgress: "#ffb400",
+//     done: "#7fb800",
+//     inputFontColor: "#adb5bd",
+//     colorPrimary: "#3a4046",
+//     colorSecondary: "#343a40",
+//     colorTertiary: "#1d2023",
+//     colorFourth: "#3f454c",
+//   },
+//   media: {
+//     tablet: "765px",
+//   },
+// };
 
 let startTasks;
 
@@ -104,13 +107,18 @@ const tasksReducer = (prevState, element) => {
         tasks: [...prevState[data.to].tasks, currentTask],
       },
     };
-  }
+  } else return element;
 };
 
 function App() {
   const [title, setTitle] = useState("React Tasks Manager");
-  const [allTasks, dispatchTasks] = useReducer(tasksReducer, startTasks);
+  const [PopupDisplayed, setPopupDisplayed] = useState(false);
+
   useTitle(title);
+
+  const [allTasks, dispatchTasks] = useReducer(tasksReducer, startTasks);
+
+  const isLightTheme = UseOptions(allTasks, dispatchTasks);
 
   useEffect(() => {
     let totalTasks = 0;
@@ -125,7 +133,13 @@ function App() {
     }
   }, [allTasks]);
 
-  const modifyTaskHandler = option => {
+  const togglePopupHandler = useCallback(
+    boolean => {
+      setPopupDisplayed(boolean);
+    },
+    [PopupDisplayed]
+  );
+  const modifyTaskHandler = useCallback(option => {
     const { action, data } = option;
     dispatchTasks(option);
     if (action === "add") setTitle("Task added");
@@ -134,7 +148,7 @@ function App() {
       setTitle(
         `Moved from  ${allTasks[data.from].title} to ${allTasks[data.to].title}`
       );
-  };
+  }, []);
 
   let content;
   if (
@@ -150,10 +164,14 @@ function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={isLightTheme ? lightTheme : darkTheme}>
       <GlobalStyles />
+      {PopupDisplayed && <Popup onTogglePopupHandler={togglePopupHandler} />}
       <Wrapper>
-        <TaskForm onModifyTasks={modifyTaskHandler} />
+        <TaskForm
+          onModifyTasks={modifyTaskHandler}
+          onTogglePopupHandler={togglePopupHandler}
+        />
         {content}
       </Wrapper>
     </ThemeProvider>

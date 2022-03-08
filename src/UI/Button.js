@@ -15,6 +15,7 @@ const Button = styled.button`
     width: auto;
     @media (max-width: ${({ theme }) => theme.media.tablet}) {
       width: 100%;
+      margin: 6px 0;
     }
   }
 

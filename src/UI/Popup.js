@@ -1,16 +1,24 @@
 import reactDOM from "react-dom";
+import { Backdrop, ModalStyled } from "./Modal";
 
-import { Backdrop, Modal } from "./Modal";
+import SettingsForm from "../components/Settings/SettingsForm";
 
-const Popup = ({ text }) => {
+const Popup = ({ onTogglePopupHandler }) => {
+  const Modal = () => (
+    <ModalStyled>
+      <SettingsForm onClose={onTogglePopupHandler} />
+    </ModalStyled>
+  );
   return (
     <>
       {reactDOM.createPortal(
         <Backdrop />,
-        document.getElementById("backdrop-root")
+        document.getElementById("popup-root")
       )}
-      {/* <Backdrop /> */}
-      <Modal>{text}</Modal>
+      {reactDOM.createPortal(
+        <Modal></Modal>,
+        document.getElementById("popup-root")
+      )}
     </>
   );
 };

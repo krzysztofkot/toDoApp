@@ -1,37 +1,33 @@
 import styled from "styled-components";
 
-const FormControl = styled.div`
+const StyledTaskOptions = styled.div`
    {
+    padding: 12px 12px 24px 12px;
     position: relative;
-  }
+    display: flex;
+    align-items: center;
 
-  span {
-    position: absolute;
-    right: 0;
-    cursor: pointer;
-    z-index: 2;
+    @media (max-width: ${({ theme }) => theme.media.tablet}) {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 
   & div {
     position: relative;
-    padding-bottom: 26px;
-  }
+    display: flex;
+    align-items: center;
+    padding-bottom: 30px;
+    /* background-color: blue; */
 
-  & label {
-    display: block;
-    // text-transform: uppercase;
-    font-size: 20px;
-    padding-bottom: 12px;
     @media (max-width: ${({ theme }) => theme.media.tablet}) {
-      font-size: 16px;
+      flex-direction: column;
+      align-items: stretch;
     }
   }
 
-  & input,
-  & textarea {
+  & input {
     border: none;
-    width: 100%;
-    display: block;
     padding: 6px;
     font: inherit;
     background-color: ${({ theme }) => theme.colors.colorSecondary};
@@ -41,30 +37,35 @@ const FormControl = styled.div`
     outline: none;
     transition: all 0.2s;
     font-size: 16px;
+    margin-right: 12px;
+    flex: 1;
 
     @media (max-width: ${({ theme }) => theme.media.tablet}) {
       font-size: 14px;
+      order: 1;
+      margin-right: 0;
     }
   }
 
-  & textarea {
-    resize: none;
-    height: 75px;
-  }
-
-  & textarea:focus,
   & input:focus {
     border-top: 1px solid #74788d;
     border-bottom: 1px solid #74788d;
   }
-
+  & label {
+    flex: 1;
+    font-size: 16px;
+    @media (max-width: ${({ theme }) => theme.media.tablet}) {
+      padding-bottom: 6px;
+      font-size: 14px;
+    }
+  }
   & p {
     position: absolute;
-    bottom: 4px;
     color: ${({ theme }) => theme.colors.errorColor};
     font-size: 12px;
-    padding: 4px 0;
+    bottom: 4px;
+    weight: 700;
   }
 `;
 
-export default FormControl;
+export default StyledTaskOptions;

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { FiSettings } from "react-icons/fi";
 import FormControl from "./FormControl";
-
 import Button from "../../../UI/Button";
 
-const TaskForm = ({ onModifyTasks }) => {
+const TaskForm = ({ onModifyTasks, onTogglePopupHandler }) => {
   const [title, setTitle] = useState("");
   const [isValidTitle, setIsValidTitle] = useState(true);
   const [isValidDesc, setIsValidDesc] = useState(true);
@@ -53,6 +53,9 @@ const TaskForm = ({ onModifyTasks }) => {
   return (
     <form onSubmit={submitHandler}>
       <FormControl>
+        <span onClick={onTogglePopupHandler.bind(true)}>
+          <FiSettings size={20} />
+        </span>
         <div>
           <label>Title</label>
           <input
@@ -80,4 +83,4 @@ const TaskForm = ({ onModifyTasks }) => {
   );
 };
 
-export default TaskForm;
+export default React.memo(TaskForm);

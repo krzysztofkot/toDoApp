@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useTitle from "../hooks/use-title";
 import { DragDropContext } from "react-beautiful-dnd";
 import { withTheme } from "styled-components";
@@ -7,29 +7,14 @@ import ListWrapper from "./ListWrapper";
 import Filter from "../Filter/Filter";
 import Chart from "../Chart/Chart";
 
-let activeFilter;
-
-if (!localStorage.getItem("savedFilter")) {
-  activeFilter = "all";
-} else activeFilter = JSON.parse(localStorage.getItem("savedFilter"));
-
 const Container = ({ allTasks, onModifyTasks, theme }) => {
-  const [filterOption, setFilterOption] = useState(activeFilter);
+  const [filterOption, setFilterOption] = useState("all");
   let tasksArr = [];
   useTitle(
     `Active filter: ${
       filterOption === "all" ? "all" : allTasks[filterOption].title
     }`
   );
-
-  useEffect(() => {
-    console.log("saved in storage");
-    localStorage.setItem("savedFilter", JSON.stringify(filterOption));
-    return () => {
-      console.log("local storage cleaned");
-      localStorage.removeItem("savedFilter");
-    };
-  }, [filterOption]);
 
   if (filterOption === "all") {
     for (const el in allTasks) {
@@ -72,7 +57,7 @@ const Container = ({ allTasks, onModifyTasks, theme }) => {
         allTasks={allTasks}
         onFilterOptions={filterOptionsHandler}
         filter={filterOption}
-        role={"filter"}
+        role="filter"
       />
       <Chart allTasks={allTasks} filter={filterOption}></Chart>
       <DragDropContext onDragEnd={dragEndHandler}>
